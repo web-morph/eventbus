@@ -10,6 +10,7 @@ import dev.ckateptb.reflection.parameter.ReflectParameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
@@ -33,6 +34,7 @@ import java.util.Collection;
  * <p>Cancelable events are skipped for non-forced handlers once cancelled.</p>
  */
 @Slf4j
+@Component
 public class EventBus {
     /**
      * Global EventBus static instance
