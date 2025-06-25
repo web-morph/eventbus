@@ -1,0 +1,88 @@
+group = "com.github.webmorph"
+version = "1.0.0"
+
+plugins {
+    id("java-library")
+    id("maven-publish")
+    id("io.spring.dependency-management").version("1.1.7")
+    id("io.github.gradle-nexus.publish-plugin").version("1.1.0")
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+    all {
+        exclude(module = "spring-boot-starter-logging")
+        exclude(group = "ch.qos.logback")
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven("https://repo.jyraf.com/repository/maven-public/")
+}
+
+dependencies {
+    // Reactor
+    api("io.projectreactor:reactor-core:3.7.7")
+    // Spring
+    api("org.springframework.boot:spring-boot-starter:3.5.0")
+    // Logger
+    api("com.github.webmorph:logger:1.0.0")
+    // Reflection
+    api("dev.ckateptb.commons:Reflect:3.0.0")
+
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.38")
+    annotationProcessor("org.projectlombok:lombok:1.18.38")
+}
+
+tasks {
+    register<Jar>("sourcesJar") {
+        archiveClassifier.set("sources")
+        from(sourceSets.main.get().allSource)
+    }
+    register<Jar>("javadocJar") {
+        archiveClassifier.set("javadoc")
+        from(javadoc)
+    }
+    javadoc {
+        options.encoding = "UTF-8"
+        options.memberLevel = JavadocMemberLevel.PUBLIC
+        isFailOnError = false
+    }
+    build {
+        dependsOn("sourcesJar", "javadocJar", "shadowJar")
+    }
+    jar {
+        enabled = true
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+            artifact(tasks.getByName("sourcesJar"))
+            artifact(tasks.getByName("javadocJar"))
+        }
+    }
+}
+
+nexusPublishing {
+    repositories {
+        create("jyrafRepo") {
+            nexusUrl.set(uri("https://repo.jyraf.com/"))
+            snapshotRepositoryUrl.set(uri("https://repo.jyraf.com/repository/maven-releases/"))
+            username.set(System.getenv("NEXUS_USERNAME"))
+            password.set(System.getenv("NEXUS_PASSWORD"))
+        }
+    }
+}
