@@ -34,6 +34,9 @@ import java.util.Collection;
  */
 @Slf4j
 public class EventBus {
+    /**
+     * Global EventBus static instance
+     */
     public static final EventBus GLOBAL = new EventBus();
     /**
      * Sink used to publish incoming events to subscribers.

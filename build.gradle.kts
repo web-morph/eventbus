@@ -10,7 +10,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(17)
     }
 }
 
@@ -35,7 +35,7 @@ dependencies {
     // Spring
     api("org.springframework.boot:spring-boot-starter:3.5.0")
     // Logger
-    api("com.github.webmorph:logger:1.0.0")
+    api("com.github.webmorph:logger:1.0.1")
     // Reflection
     api("dev.ckateptb.commons:Reflect:3.0.0")
 
@@ -59,7 +59,7 @@ tasks {
         isFailOnError = false
     }
     build {
-        dependsOn("sourcesJar", "javadocJar", "shadowJar")
+        dependsOn("sourcesJar", "javadocJar")
     }
     jar {
         enabled = true
