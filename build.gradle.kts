@@ -1,3 +1,4 @@
+var javaVersion = 17;
 group = "com.github.webmorph"
 version = "1.0.0"
 
@@ -10,7 +11,7 @@ plugins {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(javaVersion)
     }
 }
 
@@ -58,6 +59,10 @@ tasks {
         options.memberLevel = JavadocMemberLevel.PUBLIC
         isFailOnError = false
     }
+    withType<JavaCompile> {
+        options.encoding = Charsets.UTF_8.name()
+        options.release.set(javaVersion)
+    }
     build {
         dependsOn("sourcesJar", "javadocJar")
     }
@@ -66,23 +71,23 @@ tasks {
     }
 }
 
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             from(components["java"])
-            artifact(tasks.getByName("sourcesJar"))
-            artifact(tasks.getByName("javadocJar"))
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
         }
     }
-}
-
-nexusPublishing {
     repositories {
-        create("jyrafRepo") {
-            nexusUrl.set(uri("https://repo.jyraf.com/"))
-            snapshotRepositoryUrl.set(uri("https://repo.jyraf.com/repository/maven-releases/"))
-            username.set(System.getenv("NEXUS_USERNAME"))
-            password.set(System.getenv("NEXUS_PASSWORD"))
+        maven {
+            name = "jyrafRepo"
+            url = uri("https://repo.jyraf.com/repository/maven-releases/")
+            credentials {
+                username = System.getenv("NEXUS_USERNAME")
+                password = System.getenv("NEXUS_PASSWORD")
+            }
         }
     }
 }
