@@ -1,6 +1,6 @@
 var javaVersion = 17;
 group = "com.github.webmorph"
-version = "1.0.2"
+version = "1.0.3"
 
 plugins {
     id("java-library")
@@ -38,7 +38,7 @@ dependencies {
     // Logger
     api("com.github.webmorph:logger:1.0.1")
     // Reflection
-    api("dev.ckateptb.commons:Reflect:3.0.0")
+    api("dev.ckateptb.commons:Reflect:3.0.1")
 
     // Lombok
     compileOnly("org.projectlombok:lombok:1.18.38")
