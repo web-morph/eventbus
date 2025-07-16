@@ -1,6 +1,6 @@
 var javaVersion = 17;
 group = "com.github.webmorph"
-version = "1.0.0"
+version = "1.0.3"
 
 plugins {
     id("java-library")
@@ -27,7 +27,7 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven("https://repo.jyraf.com/repository/maven-public/")
+    maven("https://repo.billmarssoft.com/public/")
 }
 
 dependencies {
@@ -38,7 +38,7 @@ dependencies {
     // Logger
     api("com.github.webmorph:logger:1.0.1")
     // Reflection
-    api("dev.ckateptb.commons:Reflect:3.0.0")
+    api("dev.ckateptb.commons:Reflect:3.0.1")
 
     // Lombok
     compileOnly("org.projectlombok:lombok:1.18.38")
@@ -82,11 +82,11 @@ publishing {
     }
     repositories {
         maven {
-            name = "jyrafRepo"
-            url = uri("https://repo.jyraf.com/repository/maven-releases/")
+            name = "BillmarsSoft"
+            url = uri("https://repo.billmarssoft.com/releases/")
             credentials {
-                username = System.getenv("NEXUS_USERNAME")
-                password = System.getenv("NEXUS_PASSWORD")
+                username = System.getenv("REPOSITORY_USERNAME")
+                password = System.getenv("REPOSITORY_PASSWORD")
             }
         }
     }
