@@ -12,6 +12,7 @@ import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.SignalType;
 import reactor.core.publisher.Sinks;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
@@ -61,7 +62,7 @@ public class EventBus {
      */
     public <E extends Event> E dispatchEvent(E event) {
         for (EventPriority priority : EventPriority.values()) {
-            this.events.tryEmitNext(Tuples.of(priority, event));
+            this.events.emitNext(Tuples.of(priority, event), (signalType, emitResult) -> signalType == SignalType.ON_NEXT);
         }
         return event;
     }
