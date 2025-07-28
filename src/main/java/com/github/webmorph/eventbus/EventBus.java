@@ -8,8 +8,7 @@ import com.github.webmorph.eventbus.listener.Listener;
 import dev.ckateptb.reflection.Reflect;
 import dev.ckateptb.reflection.parameter.ReflectParameter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.context.ApplicationContext;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.SignalType;
@@ -140,13 +139,12 @@ public class EventBus {
      * validates them, and subscribes them to the appropriate event types based on their
      * parameter type and annotation metadata.</p>
      *
-     * @param event the application start event triggering registration
+     * @param context the application context
      */
-    @EventListener
     @SuppressWarnings("unchecked")
-    private void init(ApplicationStartedEvent event) {
+    private void init(ApplicationContext context) {
         Class<EventHandler> annotation = EventHandler.class;
-        event.getApplicationContext().getBeansOfType(Listener.class, true, false).values()
+        context.getBeansOfType(Listener.class, true, false).values()
                 .forEach(listener -> Reflect.on(listener).getMethodsWithAnnotation(annotation)
                         .forEach(method -> {
                             Collection<ReflectParameter<?>> parameters = method.getParameters();
