@@ -1,6 +1,8 @@
 package com.github.webmorph.eventbus.event;
 
 import com.github.webmorph.eventbus.EventBus;
+import dev.ckateptb.reflection.Reflect;
+import org.springframework.context.ApplicationContext;
 
 /**
  * Base class for all events used in the reactive EventBus system.
@@ -27,6 +29,14 @@ public abstract class Event {
      */
     @SuppressWarnings("unchecked")
     public <T extends Event> T dispatch() {
-        return EventBus.GLOBAL.dispatchEvent((T) this);
+        try {
+            return Reflect.on("com.github.webmorph.provider.ApplicationContextProvider")
+                    .getMethodWithNameAndParameters("getApplicationContext").orElseThrow().invoke()
+                    .cast(ApplicationContext.class)
+                    .getValue()
+                    .getBean(EventBus.class).dispatchEvent((T) this);
+        } catch (Exception e) {
+            return EventBus.GLOBAL.dispatchEvent((T) this);
+        }
     }
 }
