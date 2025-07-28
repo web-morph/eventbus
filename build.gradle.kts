@@ -1,6 +1,6 @@
 var javaVersion = 17;
 group = "com.github.webmorph"
-version = "1.0.3"
+version = "1.0.4"
 
 plugins {
     id("java-library")
@@ -70,7 +70,6 @@ tasks {
         enabled = true
     }
 }
-
 
 publishing {
     publications {
